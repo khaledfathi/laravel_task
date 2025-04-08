@@ -1,0 +1,35 @@
+Write a single page application
+
+We expect you to use the MVC approach. We present you two ways to solve the problem:
+
+- You can use any php framework (we know a bit of symfony and laravel) or plain php if you wish. You have to use some kind of sql service (mysql, sqlite) to store the data.
+- Alternatively you can write the process of designing the database, backend and frontend in most detailed way. In this case plan the database of the chosen feature set, write a detailed description of the components of the app.
+
+The application developed in three stages. You can target any stage but try to finish that for he deadline.
+
+## Minimal feature set
+
+- Every user is anonymous (no need to register or login).
+- Visitors can submit a message.
+- The message has
+  - title,
+  - text body,
+  - timestamp,
+  - optional parent message.
+- Anyone can write new message.
+- Anyone can attach new message to other messages.
+- No editing.
+- We should display the messages in reversed time order (newest first).
+
+## Advanced features
+
+- User registration and authentication.
+- User roles (admins are authorized to hide or delete any messages).
+- Admin user can edit users data.
+- Users can EDIT any of their own messages.
+
+## Pro features
+
+- Messages can have attachments with file upload.
+- Attached files can be downloaded via links below the message.
+-
