@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\MessageModel;
+use Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +19,22 @@ class MessageModelFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'=> fake()->name(),
-            'body'=> fake()->sentence(),
-            'hidden'=> false,
-            'parent_id'=>null,
+            'title' => fake()->sentence(3),
+            'body' => fake()->sentence(40),
+            'hidden' => false,
+            'parent_id' => fn() => \Illuminate\Support\Arr::random([null, MessageModel::inRandomOrder()->limit(1)->value('id')]),
+            'user_id' => rand(1, 10),
         ];
+    }
+    public function configure(): static
+    {
+        return $this->afterCreating(function (MessageModel $model) {
+            if (rand(0, 3) > 0) { // Adjust the probability of having a parent
+                $parent = MessageModel::inRandomOrder()->where('id', '!=', $model->id)->first();
+                if ($parent) {
+                    $model->update(['parent_id' => $parent->id]);
+                }
+            }
+        });
     }
 }

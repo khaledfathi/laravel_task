@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MessageModel;
 use App\repositories\contracts\MessageRepositoryContract;
 use Illuminate\Http\Request;
 

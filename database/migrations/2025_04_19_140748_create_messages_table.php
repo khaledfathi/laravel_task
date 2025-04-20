@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('hidden')->default(false);
 
             $table->foreignId('parent_id')->nullable()->default(null)->references('id')->on('messages')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->default(null)->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

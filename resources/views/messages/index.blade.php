@@ -15,7 +15,7 @@
         <nav class="row d-flex  justify-content-between align-items-center">
             <img class ="col-2 nav-icon-size" src="{{ asset('assets/images/site_logo.svg') }}" alt="">
             <img class ="col-2 d-md-none nav-icon-size" src="{{ asset('assets/images/menu_btn.svg') }}" alt="">
-            <ul class="col-md-3 col-xl-2 d-none d-md-flex justify-content-around align-items-center list-">
+            <ul class="col-md-3 col-xl-2 d-none m-0 d-md-flex justify-content-around align-items-center ">
                 <a href="" class=" btn p-2 bg-primary text-light  ">Register</a>
                 <a href="" class=" btn p-2 bg-primary text-light  ">Login</a>
             </ul>
@@ -50,7 +50,7 @@
                     {{-- title and timestamp --}}
                     <div class="row p-2 border-bottom align-items-center">
                         {{-- titile --}}
-                        <div class="col-8 font-weight-bold">{{$message->title}}</div> {{-- / titile --}}
+                        <div class="col-8">{{$message->title}}</div> {{-- / titile --}}
                         {{-- timestamp --}}
                         <div class="col text-end ">{{$message->created_at}}</div> {{-- / timestamp --}}
                     </div> {{-- / title and timestamp --}}
