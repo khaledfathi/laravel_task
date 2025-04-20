@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MessageModel;
 use App\repositories\contracts\MessageRepositoryContract;
 use Illuminate\Http\Request;
 
@@ -11,7 +10,8 @@ class MessageController extends Controller
     public function __construct(public MessageRepositoryContract $MessageRepository) { }
     public function index()
     {
-        $messages = $this->MessageRepository->all();
+        $messages= $this->MessageRepository->all();
+        // dd($messages);
         return view('messages.index', ['messages'=>$messages]);
     }
 

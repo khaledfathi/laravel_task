@@ -6,9 +6,6 @@ use App\Models\MessageModel;
 use Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
- */
 class MessageModelFactory extends Factory
 {
     /**
@@ -22,19 +19,15 @@ class MessageModelFactory extends Factory
             'title' => fake()->sentence(3),
             'body' => fake()->sentence(40),
             'hidden' => false,
-            'parent_id' => fn() => \Illuminate\Support\Arr::random([null, MessageModel::inRandomOrder()->limit(1)->value('id')]),
+            'parent_id' => null,
             'user_id' => rand(1, 10),
+            'created_at'=> fake()->dateTimeBetween('-1 years'),
         ];
     }
-    public function configure(): static
-    {
-        return $this->afterCreating(function (MessageModel $model) {
-            if (rand(0, 3) > 0) { // Adjust the probability of having a parent
-                $parent = MessageModel::inRandomOrder()->where('id', '!=', $model->id)->first();
-                if ($parent) {
-                    $model->update(['parent_id' => $parent->id]);
-                }
-            }
+
+    public function replies ( int $parent_id){
+        return $this->state(function () use ($parent_id){
+            return ['parent_id' => $parent_id];
         });
     }
 }

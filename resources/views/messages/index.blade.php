@@ -40,7 +40,7 @@
                         {{-- user pic --}}
                         <div class="col-2 col-md-1">
                             <div class="m-auto p-0 overflow-hidden rounded-circle bg-primary user-pic">
-                                <img class="user-pic" src="{{asset('./assets/images/default_user_image.svg')}}" alt="">
+                                <img class="user-pic" src="{{asset($message->user_image)}}" alt="">
                             </div>
                         </div> {{-- / user pic --}}
                         {{-- user name --}}
@@ -65,7 +65,7 @@
 
                     {{-- replay and comment buttons --}}
                     <div class="row mt-2 justify-content-between align-items-center">
-                        <a href="" class=" col-3 btn border shadow-sm"> (23) comments </a >
+                        <a href="" class=" col-3 btn border shadow-sm"> ({{$message->replies_count}}) comments </a >
                         <a href="" class=" col-3 btn btn-success shadow-sm "> Reply </a >
                     </div> {{-- / replay area --}}
                 </div>
