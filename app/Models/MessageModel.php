@@ -45,7 +45,15 @@ class MessageModel extends Model
 
     public function scopeWithReplies(Builder $query)
     {
-        return $query->withParentOnly()->withCountReplies()->with('replies', fn() => $query->where('parent_id'));
+        return $query->withParentOnly()->withCountReplies()->with(['replies' => function ($q) {
+            $q->select(['users.name as user_name' , 'users.image as user_image', 'messages.*'])
+                ->join('users', 'messages.user_id', '=', 'users.id');
+        }]);
+    }
+    public function scopeWithReplyUserData(Builder $query){
+       $query
+            ->select(['users.name as user_name' , 'users.image as user_image', 'messages.*'])
+            ->join('users', 'messages.user_id', '=', 'users.id');
     }
     // END - Query Scops ->>>>
 }
