@@ -1,30 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.main')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Messages</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/messages/index_style.css') }}">
-</head>
-
-<body>
-    <header class="container-fluid header--bg">
-        <nav class="row d-flex  justify-content-between align-items-center">
-            <img class="col-2 nav-icon-size" src="{{ asset('assets/images/site_logo.svg') }}" alt="">
-            <img class="col-2 d-md-none nav-icon-size" src="{{ asset('assets/images/menu_btn.svg') }}" alt="">
-            <ul class="col-md-3 col-xl-2 d-none m-0 d-md-flex justify-content-around align-items-center ">
-                <a href="" class=" btn p-2 bg-primary text-light  ">Register</a>
-                <a href="" class=" btn p-2 bg-primary text-light  ">Login</a>
-            </ul>
-        </nav>
-    </header>
-
+@section('content')
     {{-- section1 --}}
     <section class="container-fluid d-flex justify-content-center align-items-center py-5">
-        <a href="" class="btn bg-primary text-light">Leave You Message</a>
+        {{-- leave message form --}}
+        <form class="col col-md-7 col-sm-10 d-flex flex-column gap-2 justify-content-evenly align-items-start" method="POST" action="{{ route('message.store') }}">
+            @csrf
+            <h5 class="text-center align-self-center">Leave Your Message</h5>
+            <input type="text" class="col-12" placeholder="Message Title">
+            <textarea class="col-12" class="" name="message" id="" rows=4 style="resize:none;" placeholder="Your message"></textarea>
+            {{-- attach file for new message --}}
+            <div class="mb-3 col-12">
+                <input class="form-control" type="file" id="formFile" name="file">
+            </div> {{-- / attach file for new message --}}
+            <input type="submit"  value="Send" href="" class="btn btn-success col-5 col-md-3 align-self-end">
+        </form> {{-- / leave message form --}}
     </section> {{-- / section1 --}}
 
     @if ($messages)
@@ -44,7 +34,7 @@
                                 </div>
                             </div> {{-- / user pic --}}
                             {{-- user name --}}
-                            <div class="col"> User Name</div> {{-- / user name --}}
+                            <div class="col"> {{ $message->user_name }}</div> {{-- / user name --}}
                         </div> {{-- / user name and pic --}}
 
                         {{-- title and timestamp --}}
@@ -52,7 +42,8 @@
                             {{-- titile --}}
                             <div class="col-8">{{ $message->title }}</div> {{-- / titile --}}
                             {{-- timestamp --}}
-                            <div class="col text-end ">{{ $message->created_at }}</div> {{-- / timestamp --}}
+                            <div class="col text-end ">{{ $message->created_at->diffForHumans() }}</div>
+                            {{-- / timestamp --}}
                         </div> {{-- / title and timestamp --}}
 
                         {{-- message body --}}
@@ -65,8 +56,11 @@
 
                         {{-- replay and comment buttons --}}
                         <div class="row mt-2 justify-content-between align-items-center">
-                            <div href="" class=" col-3 btn border shadow-sm" data-bs-toggle="collapse" data-bs-target='#replies-{{$message->id}}' aria-expanded="false"  aria-controls="replies-{{$message->id}}">
-                                ({{ $message->replies_count }}) comments
+                            <div href="" class=" col-3 btn border shadow-sm" data-bs-toggle="collapse"
+                                data-bs-target='#replies-{{ $message->id }}' aria-expanded="false"
+                                aria-controls="replies-{{ $message->id }}">
+                                ({{ $message->replies_count }})
+                                comments
                             </div>
                             <a href="" class=" col-3 btn btn-success shadow-sm "> Reply </a>
                         </div> {{-- / replay area --}}
@@ -78,7 +72,7 @@
             @if ($message->replies)
                 @foreach ($message->replies as $reply)
                     {{-- replies section --}}
-                    <section class="container collapse" id ="replies-{{$message->id}}">
+                    <section class="container collapse" id ="replies-{{ $message->id }}">
                         {{-- row --}}
                         <div class="row my-1 justify-content-end">
                             {{-- comment reply data area --}}
@@ -113,11 +107,9 @@
                             </div> {{-- / comment reply data area --}}
                         </div> {{-- / row --}}
                     </section>
-                @endforeach
+                @endforeach {{--  $message->replies --}}
             @endif
-        @endforeach
+        @endforeach {{-- $messages --}}
     @endif
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-</body>
 
-</html>
+@endsection
