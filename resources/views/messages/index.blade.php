@@ -1,18 +1,21 @@
 @extends('layouts.main')
+@section('scripts')
+    <script src="{{asset('assets/js/messages.js')}}"></script>
+@endsection
 
 @section('content')
     {{-- section1 --}}
     <section class="container-fluid d-flex justify-content-center align-items-center py-5">
         {{-- leave message form --}}
-        <form class="col col-md-7 col-sm-10 d-flex flex-column gap-2 justify-content-evenly align-items-start" method="POST" action="{{ route('message.store') }}">
+        <form class="col col-md-7 col-sm-10 d-flex flex-column gap-2 justify-content-evenly align-items-start" method="POST" action="{{ route('message.store') }}" enctype="multipart/form-data">
             @csrf
             <h5 class="text-center align-self-center">Leave Your Message</h5>
-            <input type="text" class="col-12" placeholder="Message Title">
+            <input type="text" name="title" class="col-12" placeholder="Message Title">
             <textarea class="col-12" class="" name="message" id="" rows=4 style="resize:none;" placeholder="Your message"></textarea>
             {{-- attach file for new message --}}
             <div class="mb-3 col-12 d-flex align-items-center display">
-                <input class="form-control me-2" type="file" id="formFile" name="file">
-                <i class="bi bi-x-circle" style="font-size: 25px"></i>
+                <input id="file" class="form-control me-2" type="file" id="formFile" name="file">
+                <i id="clear-file" class="bi bi-x-circle" style="font-size: 25px; cursor: pointer;"></i>
             </div> {{-- / attach file for new message --}}
             <input type="submit"  value="Send" href="" class="btn btn-success col-5 col-md-3 align-self-end">
         </form> {{-- / leave message form --}}
@@ -40,7 +43,7 @@
                                 </div>
                             </div> {{-- / user pic --}}
                             {{-- user name --}}
-                            <div class="col"> {{ $message->user_name }}</div> {{-- / user name --}}
+                            <div class="col"> {{ $message->user_id ? $message->user_name : 'Anonymous' }}</div> {{-- / user name --}}
                         </div> {{-- / user name and pic --}}
 
                         {{-- title and timestamp --}}
@@ -92,7 +95,7 @@
                                         </div>
                                     </div> {{-- / user pic --}}
                                     {{-- user name --}}
-                                    <div class="col"> User Name</div> {{-- / user name --}}
+                                    <div class="col"> {{ $reply->user_id ? $reply->user_name : 'Anonymous' }}</div> {{-- / user name --}}
                                 </div> {{-- / user name and pic --}}
 
                                 {{-- title and timestamp --}}

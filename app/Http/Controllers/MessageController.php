@@ -11,7 +11,6 @@ class MessageController extends Controller
     public function index()
     {
         $messages= $this->MessageRepository->all();
-        // dd($messages[2]);
         return view('messages.index', ['messages'=>$messages]);
     }
 
@@ -22,6 +21,7 @@ class MessageController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         return 'store';
     }
 
