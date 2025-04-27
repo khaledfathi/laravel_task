@@ -7,6 +7,6 @@ use App\repositories\contracts\MessageRepositoryContract;
 
 class MessageRepository implements MessageRepositoryContract{
     public function all(){
-        return MessageModel::withReplies()->get();
+        return MessageModel::withReplies()->paginate(10);
     }
 }

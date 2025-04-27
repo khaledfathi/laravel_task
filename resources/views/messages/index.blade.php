@@ -10,14 +10,20 @@
             <input type="text" class="col-12" placeholder="Message Title">
             <textarea class="col-12" class="" name="message" id="" rows=4 style="resize:none;" placeholder="Your message"></textarea>
             {{-- attach file for new message --}}
-            <div class="mb-3 col-12">
-                <input class="form-control" type="file" id="formFile" name="file">
+            <div class="mb-3 col-12 d-flex align-items-center display">
+                <input class="form-control me-2" type="file" id="formFile" name="file">
+                <i class="bi bi-x-circle" style="font-size: 25px"></i>
             </div> {{-- / attach file for new message --}}
             <input type="submit"  value="Send" href="" class="btn btn-success col-5 col-md-3 align-self-end">
         </form> {{-- / leave message form --}}
     </section> {{-- / section1 --}}
 
     @if ($messages)
+        {{-- top pagination --}}
+        <div class="container">
+            {{$messages->links()}}
+        </div> {{-- / top pagination --}}
+
         @foreach ($messages as $message)
             {{-- section2 - message --}}
             <section class="container my-3 p-3 msg-bg rounded-3">
@@ -110,6 +116,11 @@
                 @endforeach {{--  $message->replies --}}
             @endif
         @endforeach {{-- $messages --}}
+
+        {{-- bottom pagination --}}
+        <div class="container">
+            {{$messages->links()}}
+        </div> {{-- / bottom pagination --}}
     @endif
 
 @endsection
