@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\constants\Constant;
+use App\Http\Requests\messages\StoreMessageRequest;
 use App\repositories\contracts\MessageRepositoryContract;
 use Illuminate\Http\Request;
 
@@ -11,7 +13,10 @@ class MessageController extends Controller
     public function index()
     {
         $messages= $this->MessageRepository->all();
-        return view('messages.index', ['messages'=>$messages]);
+        return view('messages.index', [
+            'messages'=>$messages ,
+            'defaultUserImage'=>Constant::$DEFAULT_USER_IMAGE
+        ]);
     }
 
     public function create()
@@ -19,10 +24,13 @@ class MessageController extends Controller
         return 'create';
     }
 
-    public function store(Request $request)
+    public function store(StoreMessageRequest $request)
     {
-        dd($request->all());
-        return 'store';
+        $this->MessageRepository->store($request->title , $request->message , $request->parent_id);
+        // $messages = $this->MessageRepository->all();
+        // $lastPageUrl = $messages->url($messages->lastPage());
+        // return redirect($lastPageUrl);
+        return back();
     }
 
     public function show(string $id)

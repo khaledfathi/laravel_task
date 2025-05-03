@@ -1,30 +1,38 @@
 @extends('layouts.main')
 @section('scripts')
-    <script src="{{asset('assets/js/messages.js')}}"></script>
+    <script src="{{ asset('assets/js/messages.js') }}"></script>
 @endsection
 
 @section('content')
     {{-- section1 --}}
     <section class="container-fluid d-flex justify-content-center align-items-center py-5">
         {{-- leave message form --}}
-        <form class="col col-md-7 col-sm-10 d-flex flex-column gap-2 justify-content-evenly align-items-start" method="POST" action="{{ route('message.store') }}" enctype="multipart/form-data">
+        <form class="col col-md-7 col-sm-10 d-flex flex-column gap-2 justify-content-evenly align-items-start" method="POST"
+            action="{{ route('message.store') }}" enctype="multipart/form-data">
             @csrf
             <h5 class="text-center align-self-center">Leave Your Message</h5>
+
+            {{-- errors --}}
+            @foreach ($errors->all() as $error)
+                <h6 class="text-center align-self-center text-danger">{{ $error }}</h6>
+            @endforeach ($errors as $erro)
+
             <input type="text" name="title" class="col-12" placeholder="Message Title">
-            <textarea class="col-12" class="" name="message" id="" rows=4 style="resize:none;" placeholder="Your message"></textarea>
+            <textarea class="col-12" class="" name="message" id="" rows=4 style="resize:none;"
+                placeholder="Your message"></textarea>
             {{-- attach file for new message --}}
             <div class="mb-3 col-12 d-flex align-items-center display">
                 <input id="file" class="form-control me-2" type="file" id="formFile" name="file">
                 <i id="clear-file" class="bi bi-x-circle" style="font-size: 25px; cursor: pointer;"></i>
             </div> {{-- / attach file for new message --}}
-            <input type="submit"  value="Send" href="" class="btn btn-success col-5 col-md-3 align-self-end">
+            <input type="submit" value="Send" href="" class="btn btn-success col-5 col-md-3 align-self-end">
         </form> {{-- / leave message form --}}
     </section> {{-- / section1 --}}
 
     @if ($messages)
         {{-- top pagination --}}
         <div class="container">
-            {{$messages->links()}}
+            {{ $messages->links() }}
         </div> {{-- / top pagination --}}
 
         @foreach ($messages as $message)
@@ -39,11 +47,13 @@
                             {{-- user pic --}}
                             <div class="col-2 col-md-1">
                                 <div class="m-auto p-0 overflow-hidden rounded-circle bg-primary user-pic">
-                                    <img class="user-pic" src="{{ asset($message->user_image) }}" alt="">
+                                    <img class="user-pic" src="{{ asset($message->user_image ?? $defaultUserImage) }}"
+                                        alt="">
                                 </div>
                             </div> {{-- / user pic --}}
                             {{-- user name --}}
-                            <div class="col"> {{ $message->user_id ? $message->user_name : 'Anonymous' }}</div> {{-- / user name --}}
+                            <div class="col"> {{ $message->user_id ? $message->user_name : 'Anonymous' }}</div>
+                            {{-- / user name --}}
                         </div> {{-- / user name and pic --}}
 
                         {{-- title and timestamp --}}
@@ -63,16 +73,27 @@
                             <div class="row p-2 border-bottom"> No Files </div> {{-- / attachment files --}}
                         @endif
 
-                        {{-- replay and comment buttons --}}
-                        <div class="row mt-2 justify-content-between align-items-center">
-                            <div href="" class=" col-3 btn border shadow-sm" data-bs-toggle="collapse"
+                        {{--  reply input--}}
+                        <form class="row" method="POST" action="{{route('message.store')}}">
+                            @csrf
+                            <input type="hidden" name="parent_id" value="{{$message->id}}">
+                            <input name="title" type="text" class="col-11  my-2" placeholder="Message Title">
+                            <textarea class="col-11" name="message" id="" rows="3" placeholder="Reply Message"></textarea>
+                            <button class = "col-1 btn align-self-center" style="font-size:30px;color:blue;" type="submit">
+                                <i class="bi bi-send-fill text-center" ></i>
+                            </button>
+                        </form>
+                        {{--  / replay input--}}
+
+                        {{-- comment button --}}
+                        <div class="row justify-content-center">
+                            <div class="col-3 col-md-2 btn m-2 bg-light" style="font-size:20px" data-bs-toggle="collapse"
                                 data-bs-target='#replies-{{ $message->id }}' aria-expanded="false"
                                 aria-controls="replies-{{ $message->id }}">
+                                <i class="bi bi-chat-left-text-fill"></i>
                                 ({{ $message->replies_count }})
-                                comments
-                            </div>
-                            <a href="" class=" col-3 btn btn-success shadow-sm "> Reply </a>
-                        </div> {{-- / replay area --}}
+                            </div> {{-- / comment button --}}
+                        </div>
                     </div>
                     {{-- / comment data area --}}
                 </div> {{-- / row --}}
@@ -91,11 +112,13 @@
                                     {{-- user pic --}}
                                     <div class="col-2 col-md-1">
                                         <div class="m-auto p-0 overflow-hidden rounded-circle bg-primary user-pic">
-                                            <img class="user-pic" src="{{ asset($reply->user_image) }}" alt="">
+                                            <img class="user-pic"
+                                                src="{{ asset($reply->user_image ?? $defaultUserImage) }}" alt="">
                                         </div>
                                     </div> {{-- / user pic --}}
                                     {{-- user name --}}
-                                    <div class="col"> {{ $reply->user_id ? $reply->user_name : 'Anonymous' }}</div> {{-- / user name --}}
+                                    <div class="col"> {{ $reply->user_id ? $reply->user_name : 'Anonymous' }}</div>
+                                    {{-- / user name --}}
                                 </div> {{-- / user name and pic --}}
 
                                 {{-- title and timestamp --}}
@@ -103,16 +126,11 @@
                                     {{-- titile --}}
                                     <div class="col-8">{{ $reply->title }}</div> {{-- / titile --}}
                                     {{-- timestamp --}}
-                                    <div class="col text-end ">{{ $reply->created_at }}</div> {{-- / timestamp --}}
+                                    <div class="col text-end ">{{ $reply->created_at->diffForHumans()}}</div> {{-- / timestamp --}}
                                 </div> {{-- / title and timestamp --}}
 
                                 {{-- message body --}}
                                 <div class="row p-2 border-bottom">{{ $reply->body }}</div> {{-- / message body --}}
-
-                                {{-- attachment files --}}
-                                @if ($reply->file)
-                                    <div class="row p-2 border-bottom"> No Files </div> {{-- / attachment files --}}
-                                @endif
                             </div> {{-- / comment reply data area --}}
                         </div> {{-- / row --}}
                     </section>
@@ -122,7 +140,7 @@
 
         {{-- bottom pagination --}}
         <div class="container">
-            {{$messages->links()}}
+            {{ $messages->links() }}
         </div> {{-- / bottom pagination --}}
     @endif
 
