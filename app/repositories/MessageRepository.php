@@ -11,7 +11,7 @@ class MessageRepository implements MessageRepositoryContract
     {
         return MessageModel::withReplies()->paginate(10);
     }
-    public function store(string $title, string $message, int $parent_id)
+    public function store(string $title, string $message, int|null $parent_id=null)
     {
         MessageModel::create([
             'title' => $title,

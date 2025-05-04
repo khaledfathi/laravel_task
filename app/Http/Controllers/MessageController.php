@@ -27,9 +27,7 @@ class MessageController extends Controller
     public function store(StoreMessageRequest $request)
     {
         $this->MessageRepository->store($request->title , $request->message , $request->parent_id);
-        // $messages = $this->MessageRepository->all();
-        // $lastPageUrl = $messages->url($messages->lastPage());
-        // return redirect($lastPageUrl);
+        session()->flash('success', 'Message has been sent successfuly' );
         return back();
     }
 

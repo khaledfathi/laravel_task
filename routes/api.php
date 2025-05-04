@@ -2,6 +2,7 @@
 
 use App\Models\MessageModel;
 use App\Models\User;
+use App\repositories\MessageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,5 +15,5 @@ Route::get('/user', function (Request $request) {
 });
 
 Route::get('/message', function (Request $request) {
-    return response(MessageModel::all());
+    return response((new MessageRepository())->all());
 });

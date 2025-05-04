@@ -1,5 +1,11 @@
 const
-    clearFile = document.querySelector("#clear-file");
+    // UI  elements
+    flashMessage = document.querySelector('#flash-message'),
+    clearFile = document.querySelector("#clear-file"),
     file = document.querySelector("#file");
 
+// --------- EVENTS ---------
 clearFile.addEventListener('click' ,()=>file.value='');
+
+// --------- INVOCATIONS ---------
+setTimeout(()=>flashMessage.style.display="none" , 3000)
