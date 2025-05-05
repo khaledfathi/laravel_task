@@ -3,6 +3,9 @@
 @section('head')
     <link rel="stylesheet" href="{{ asset('./assets/css/auth/login.css') }}">
 @endsection
+@section('scripts')
+    <script src="{{'assets/js/login.js'}}"></script>
+@endsection
 
 @section('content')
     <div class="container">

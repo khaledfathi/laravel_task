@@ -33,7 +33,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             return redirect(route('root'));
         }
-        return  back()->withErrors('Invalid Email or Passowrd');
+        return  back()->withErrors('Invalid Email or Passoword');
     }
 
     public function storeNewUser(StoreUserRequest $request){
