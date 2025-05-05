@@ -28,12 +28,13 @@
 
                     <div class="card bg-glass">
                         <div class="card-body px-4 py-5 px-md-5">
-                            <form>
+                            <form  method="POST" action="{{route('auth.new-user')}}">
+                                @csrf
                                 <!-- 2 column grid layout with text inputs for the first and last names -->
                                 <div class="row">
                                     <div class="col-md-12 mb-8">
                                         <div data-mdb-input-init class="form-outline">
-                                            <input type="text" id="form3Example2" class="form-control" />
+                                            <input name="name" type="text" id="form3Example2" class="form-control" />
                                             <label class="form-label" for="form3Example2">Name</label>
                                         </div>
                                     </div>
@@ -41,13 +42,13 @@
 
                                 <!-- Email input -->
                                 <div data-mdb-input-init class="form-outline mb-4">
-                                    <input type="email" id="form3Example3" class="form-control" />
+                                    <input name="email" type="email" id="form3Example3" class="form-control" />
                                     <label class="form-label" for="form3Example3">Email address</label>
                                 </div>
 
                                 <!-- Password input -->
                                 <div data-mdb-input-init class="form-outline mb-4">
-                                    <input type="password" id="form3Example4" class="form-control" />
+                                    <input name="password" type="password" id="form3Example4" class="form-control" />
                                     <label class="form-label" for="form3Example4">Password</label>
                                 </div>
 

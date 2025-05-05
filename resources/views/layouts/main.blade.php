@@ -20,8 +20,12 @@
             </a>
             <img class="col-2 d-md-none nav-icon-size" src="{{ asset('assets/images/menu_btn.svg') }}" alt="">
             <ul class="col-md-3 col-xl-2 d-none m-0 d-md-flex justify-content-around align-items-center ">
-                <a href="{{url(route('auth.register'))}}" class=" btn p-2 bg-primary text-light  ">Register</a>
-                <a href="{{url(route('auth.login'))}}" class=" btn p-2 bg-primary text-light  ">Login</a>
+                @if (!Auth::check())
+                    <a href="{{url(route('auth.register'))}}" class=" btn p-2 bg-primary text-light  ">Register</a>
+                    <a href="{{url(route('auth.login'))}}" class=" btn p-2 bg-primary text-light  ">Login</a>
+                @else
+                    <a href="{{url(route('auth.logout'))}}" class=" btn p-2 bg-primary text-light  ">Logout</a>
+                @endif
             </ul>
         </nav>
     </header>

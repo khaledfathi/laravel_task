@@ -15,6 +15,7 @@ class MessageModel extends Model
         'body',
         'file',
         'hidden',
+        'user_id',
         'parent_id'
     ];
 

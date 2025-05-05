@@ -81,7 +81,12 @@
 
                         {{-- attachment files --}}
                         @if ($message->file)
-                            <div class="row p-2 border-bottom"> No Files </div> {{-- / attachment files --}}
+                            <div class="row py-2 border-bottom">
+                                <a href="{{asset( "$storagePath/$message->file")}}" class="col-2 p-0">
+                                    <i class="bi bi-paperclip" style="font-size: 20px;color:red"></i>
+                                        File Attached
+                                </a>
+                            </div> {{-- / attachment files --}}
                         @endif
 
                         {{--  reply input--}}

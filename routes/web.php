@@ -16,5 +16,11 @@ Route::resource('/user', UserController::class);
 /* ---------- */
 
 /* Auth Routes */
-Route::get ('/register', [AuthController::class, 'register'])->name('auth.register');
-Route::get ('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::middleware(['guest'])->group(function (){
+    Route::get ('/register', [AuthController::class, 'register'])->name('auth.register');
+    Route::get ('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('/auth', [AuthController::class, 'auth'])->name('auth.auth');
+    Route::post('/store-new-user', [AuthController::class, 'storeNewUser'])->name('auth.new-user');
+});
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');

@@ -11,12 +11,14 @@ class MessageRepository implements MessageRepositoryContract
     {
         return MessageModel::withReplies()->paginate(10);
     }
-    public function store(string $title, string $message, int|null $parent_id=null)
+    public function store(string $title, string $message , string|null $file=null,  int|null $user_id=null ,  int|null  $parent_id=null):int
     {
-        MessageModel::create([
+        return MessageModel::create([
             'title' => $title,
             'body' => $message,
+            'file'=>$file,
+            'user_id'=>$user_id,
             'parent_id' => $parent_id
-        ]);
+        ])->id;
     }
 }
