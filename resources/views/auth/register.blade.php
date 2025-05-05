@@ -3,6 +3,9 @@
 @section('head')
     <link rel="stylesheet" href="{{ asset('./assets/css/auth/register.css') }}">
 @endsection
+@section('scripts')
+    <script src="{{asset('assets/js/register.js')}}"></script>
+@endsection
 
 @section('content')
     <!-- Section: Design Block -->
@@ -30,6 +33,13 @@
                         <div class="card-body px-4 py-5 px-md-5">
                             <form  method="POST" action="{{route('auth.new-user')}}">
                                 @csrf
+                                @if ($errors->all())
+                                <div id="errors" class="row py-2 text-danger">
+                                    @foreach ($errors->all() as $error)
+                                        <p>{{$error}}</p>
+                                    @endforeach
+                                </div>
+                                @endif
                                 <!-- 2 column grid layout with text inputs for the first and last names -->
                                 <div class="row">
                                     <div class="col-md-12 mb-8">
