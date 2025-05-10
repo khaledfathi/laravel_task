@@ -51,7 +51,7 @@ class MessageController extends Controller
 
     public function show(string $id)
     {
-        return 'show';
+        return view('messages.show',['id'=>$id]);
     }
 
     public function edit(string $id)

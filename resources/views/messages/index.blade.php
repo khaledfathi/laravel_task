@@ -7,15 +7,15 @@
 
     {{-- errors --}}
     @if (count($errors))
-        <div  class="container my-2 border-bottom">
-            <h5  class="text-center text-danger">Errors</h5>
+        <div class="container my-2 border-bottom">
+            <h5 class="text-center text-danger">Errors</h5>
             @foreach ($errors->all() as $error)
                 <h6 class="text-danger text-center">{{ $error }}</h6>
             @endforeach
         </div>
     @elseif (session()->has('success'))
-        <div  id="flash-message" class="container my-3 border-bottom">
-            <h5 class="text-success text-center">{{ session('success')}}</h5>
+        <div id="flash-message" class="container my-3 border-bottom">
+            <h5 class="text-success text-center">{{ session('success') }}</h5>
         </div>
     @endif
     {{-- /errors --}}
@@ -65,6 +65,29 @@
                             {{-- user name --}}
                             <div class="col"> {{ $message->user_id ? $message->user_name : 'Anonymous' }}</div>
                             {{-- / user name --}}
+
+                            @if (Auth::check() && auth()->user()->id == $message->user_id)
+                                {{-- delete and edit icons  --}}
+                                <div class="position-relative col-2 col-md-1 text-end d-flex justify-content-end gap-4">
+                                    {{-- Delete --}}
+                                    <form action="{{ route('message.destroy', $message->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn p-0"><i class="bi bi-trash3-fill"
+                                                style="color: red;font-size:25px"></i></button>
+                                    </form>
+                                    {{-- / Delete --}}
+
+                                    {{-- Update --}}
+                                    <form action="{{ route('message.edit', $message->id) }}" method="GET">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn p-0"><i class="bi bi-pencil-square"
+                                                style="color: green; font-size:25px"></i></button>
+                                    </form>
+                                    {{-- / Update --}}
+                                </div> {{-- delete and edit icons  --}}
+                            @endif
                         </div> {{-- / user name and pic --}}
 
                         {{-- title and timestamp --}}
@@ -82,24 +105,24 @@
                         {{-- attachment files --}}
                         @if ($message->file)
                             <div class="row py-2 border-bottom">
-                                <a href="{{asset( "$storagePath/$message->file")}}" class="col-2 p-0">
+                                <a href="{{ asset("$storagePath/$message->file") }}" class="col-2 p-0">
                                     <i class="bi bi-paperclip" style="font-size: 20px;color:red"></i>
-                                        File Attached
+                                    File Attached
                                 </a>
                             </div> {{-- / attachment files --}}
                         @endif
 
-                        {{--  reply input--}}
-                        <form class="row" method="POST" action="{{route('message.store')}}">
+                        {{--  reply input --}}
+                        <form class="row" method="POST" action="{{ route('message.store') }}">
                             @csrf
-                            <input type="hidden" name="parent_id" value="{{$message->id}}">
+                            <input type="hidden" name="parent_id" value="{{ $message->id }}">
                             <input name="title" type="text" class="col-11  my-2" placeholder="Reply Title">
                             <textarea class="col-11" name="message" id="" rows="3" placeholder="Reply Message"></textarea>
                             <button class = "col-1 btn align-self-center" style="font-size:30px;color:blue;" type="submit">
-                                <i class="bi bi-send-fill text-center" ></i>
+                                <i class="bi bi-send-fill text-center"></i>
                             </button>
                         </form>
-                        {{--  / replay input--}}
+                        {{--  / replay input --}}
 
                         {{-- comment button --}}
                         <div class="row justify-content-center">
@@ -129,7 +152,8 @@
                                     <div class="col-2 col-md-1">
                                         <div class="m-auto p-0 overflow-hidden rounded-circle bg-primary user-pic">
                                             <img class="user-pic"
-                                                src="{{ asset($reply->user_image ?? $defaultUserImage) }}" alt="">
+                                                src="{{ asset($reply->user_image ?? $defaultUserImage) }}"
+                                                alt="">
                                         </div>
                                     </div> {{-- / user pic --}}
                                     {{-- user name --}}
@@ -142,7 +166,8 @@
                                     {{-- titile --}}
                                     <div class="col-8">{{ $reply->title }}</div> {{-- / titile --}}
                                     {{-- timestamp --}}
-                                    <div class="col text-end ">{{ $reply->created_at->diffForHumans()}}</div> {{-- / timestamp --}}
+                                    <div class="col text-end ">{{ $reply->created_at->diffForHumans() }}</div>
+                                    {{-- / timestamp --}}
                                 </div> {{-- / title and timestamp --}}
 
                                 {{-- message body --}}

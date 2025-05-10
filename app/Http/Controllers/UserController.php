@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\constants\Constant;
+use App\repositories\contracts\UserRepositoryContract;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    public function __construct( private  UserRepositoryContract $userRepository) { }
     public function index()
     {
         return "user index";
@@ -24,7 +28,7 @@ class UserController extends Controller
 
     public function show(string $id)
     {
-        return "user show";
+        return $this->userRepository->show($id);
     }
 
     public function edit(string $id)
@@ -40,5 +44,18 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         return "user destroy";
+    }
+
+    public function userProfile()
+    {
+        if(Auth::check()){
+            $user = Auth::user();
+            return view('user.profile', [
+                'user' => $user,
+                'defaultUserImage' => Constant::$DEFAULT_USER_IMAGE,
+
+            ]);
+        }
+        return redirect(route('root'));
     }
 }

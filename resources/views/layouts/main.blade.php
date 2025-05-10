@@ -24,6 +24,7 @@
                     <a href="{{url(route('auth.register'))}}" class=" btn p-2 bg-primary text-light  ">Register</a>
                     <a href="{{url(route('auth.login'))}}" class=" btn p-2 bg-primary text-light  ">Login</a>
                 @else
+                    <a href="{{url(route('user.profile'))}}" class=" btn p-2 bg-primary text-light  ">Profile</a>
                     <a href="{{url(route('auth.logout'))}}" class=" btn p-2 bg-primary text-light  ">Logout</a>
                 @endif
             </ul>

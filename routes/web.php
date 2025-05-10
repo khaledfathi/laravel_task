@@ -15,6 +15,9 @@ Route::resource('/message', MessageController::class);
 Route::resource('/user', UserController::class);
 /* ---------- */
 
+
+/* User Profile */
+route::get('/user-profile', [UserController::class, 'userProfile'])->name('user.profile');
 /* Auth Routes */
 Route::middleware(['guest'])->group(function (){
     Route::get ('/register', [AuthController::class, 'register'])->name('auth.register');

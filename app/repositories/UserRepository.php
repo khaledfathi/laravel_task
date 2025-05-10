@@ -14,4 +14,8 @@ class UserRepository implements UserRepositoryContract{
             'image'=>$image
         ]);
     }
+
+    public function show (int $id):User{
+        return User::findOrFail($id);
+    }
 }
