@@ -1,4 +1,7 @@
 @extends('layouts.main')
+@section('head')
+    <link rel="stylesheet" href="{{ asset('assets/css/messages/index.css') }}">
+@endsection
 @section('scripts')
     <script src="{{ asset('assets/js/messages.js') }}"></script>
 @endsection
@@ -93,7 +96,7 @@
                         {{-- title and timestamp --}}
                         <div class="row p-2 border-bottom align-items-center">
                             {{-- titile --}}
-                            <div class="col-8">{{ $message->title }}</div> {{-- / titile --}}
+                            <div class="col-8"><a  class= "message-link" href="{{route('message.show' , $message->id)}}">{{ $message->title }}</a></div> {{-- / titile --}}
                             {{-- timestamp --}}
                             <div class="col text-end ">{{ $message->created_at->diffForHumans() }}</div>
                             {{-- / timestamp --}}

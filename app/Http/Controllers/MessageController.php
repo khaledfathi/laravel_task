@@ -51,21 +51,42 @@ class MessageController extends Controller
 
     public function show(string $id)
     {
-        return view('messages.show',['id'=>$id]);
+        $message = $this->MessageRepository->show($id);
+        if($message){
+            return view('messages.show',[
+                'message' => $message,
+                'defaultUserImage'=>Constant::$DEFAULT_USER_IMAGE,
+                'storagePath' => Constant::$FILES_UPLOADED_PATH,
+            ]);
+        }
+        return back()->with('error', 'Message not found' );
+
     }
 
     public function edit(string $id)
     {
-        return 'edit';
+        $message = $this->MessageRepository->show($id);
+        return view('messages.edit', [
+            'message' => $message,
+            'defaultUserImage'=>Constant::$DEFAULT_USER_IMAGE,
+            'storagePath' => Constant::$FILES_UPLOADED_PATH,
+        ]);
     }
 
     public function update(Request $request, string $id)
     {
+        //need to change/Remove the file from storage ***
         return 'update';
     }
 
     public function destroy(string $id)
     {
-        return 'destroy';
+        //need to remove the file from storage ***
+
+        if(Auth::check()){
+            $this->MessageRepository->destroyWithUser($id , Auth::id());
+            return redirect(route('message.index'))->with('success', 'Message has been deleted successfuly' );
+        }
+        return redirect(route('message.index'))->with('error', 'You are not authorized to delete this message' );
     }
 }

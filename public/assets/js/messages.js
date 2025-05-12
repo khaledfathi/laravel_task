@@ -8,4 +8,4 @@ const
 clearFile.addEventListener('click' ,()=>file.value='');
 
 // --------- INVOCATIONS ---------
-setTimeout(()=>flashMessage.style.display="none" , 3000)
+if(flashMessage) setTimeout(()=>flashMessage.style.display="none" , 3000)

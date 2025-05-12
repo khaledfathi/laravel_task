@@ -8,7 +8,7 @@
     <title>@yield('title', 'Message App')</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/messages/index_style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/layouts/main.css') }}">
     @yield('head')
 </head>
 
@@ -19,11 +19,12 @@
                 <img class="nav-icon-size" src="{{ asset('assets/images/site_logo.svg') }}" alt="">
             </a>
             <img class="col-2 d-md-none nav-icon-size" src="{{ asset('assets/images/menu_btn.svg') }}" alt="">
-            <ul class="col-md-3 col-xl-2 d-none m-0 d-md-flex justify-content-around align-items-center ">
+            <ul class="col-md-5 col-xl-4 d-none m-0 d-md-flex justify-content-around align-items-center ">
                 @if (!Auth::check())
                     <a href="{{url(route('auth.register'))}}" class=" btn p-2 bg-primary text-light  ">Register</a>
                     <a href="{{url(route('auth.login'))}}" class=" btn p-2 bg-primary text-light  ">Login</a>
                 @else
+                    <a href="" class=" btn p-2 bg-primary text-light ">Admin Panel</a>
                     <a href="{{url(route('user.profile'))}}" class=" btn p-2 bg-primary text-light  ">Profile</a>
                     <a href="{{url(route('auth.logout'))}}" class=" btn p-2 bg-primary text-light  ">Logout</a>
                 @endif
