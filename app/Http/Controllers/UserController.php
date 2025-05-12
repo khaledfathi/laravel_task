@@ -58,4 +58,11 @@ class UserController extends Controller
         }
         return redirect(route('root'));
     }
+
+    public function adminPanel()
+    {
+        //show user list here
+        return view('admin.index', );
+    }
+
 }

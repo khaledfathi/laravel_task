@@ -14,6 +14,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            AdminUserSeeder::class,
+        ]);
         User::factory(10)->create();
         MessageModel::factory(40)->create();
         for ($i=1; $i <=20 ; $i++) {
