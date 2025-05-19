@@ -69,7 +69,7 @@
                             <div class="col"> {{ $message->user_id ? $message->user_name : 'Anonymous' }}</div>
                             {{-- / user name --}}
 
-                            @if (Auth::check() && auth()->user()->id == $message->user_id)
+                            @if ($currentUser && ($currentUser->id == $message->user_id) | $isAdmin)
                                 {{-- delete and edit icons  --}}
                                 <div class="position-relative col-2 col-md-1 text-end d-flex justify-content-end gap-4">
                                     {{-- Delete --}}
@@ -80,15 +80,16 @@
                                                 style="color: red;font-size:25px"></i></button>
                                     </form>
                                     {{-- / Delete --}}
-
-                                    {{-- Update --}}
-                                    <form action="{{ route('message.edit', $message->id) }}" method="GET">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn p-0"><i class="bi bi-pencil-square"
-                                                style="color: green; font-size:25px"></i></button>
-                                    </form>
-                                    {{-- / Update --}}
+                                        @if (!$isAdmin || $isAdmin && $currentUser->id == $message->user_id)
+                                        {{-- Update --}}
+                                        <form action="{{ route('message.edit', $message->id) }}" method="GET">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn p-0"><i class="bi bi-pencil-square"
+                                                    style="color: green; font-size:25px"></i></button>
+                                        </form>
+                                        {{-- / Update --}}
+                                    @endif
                                 </div> {{-- delete and edit icons  --}}
                             @endif
                         </div> {{-- / user name and pic --}}
@@ -96,7 +97,9 @@
                         {{-- title and timestamp --}}
                         <div class="row p-2 border-bottom align-items-center">
                             {{-- titile --}}
-                            <div class="col-8"><a  class= "message-link" href="{{route('message.show' , $message->id)}}">{{ $message->title }}</a></div> {{-- / titile --}}
+                            <div class="col-8"><a class= "message-link"
+                                    href="{{ route('message.show', $message->id) }}">{{ $message->title }}</a></div>
+                            {{-- / titile --}}
                             {{-- timestamp --}}
                             <div class="col text-end ">{{ $message->created_at->diffForHumans() }}</div>
                             {{-- / timestamp --}}
@@ -162,6 +165,31 @@
                                     {{-- user name --}}
                                     <div class="col"> {{ $reply->user_id ? $reply->user_name : 'Anonymous' }}</div>
                                     {{-- / user name --}}
+                                    @if ($currentUser && ($currentUser->id == $reply->user_id) | $isAdmin)
+                                        {{-- delete and edit icons  --}}
+                                        <div
+                                            class="position-relative col-2 col-md-1 text-end d-flex justify-content-end gap-4">
+                                            {{-- Delete --}}
+                                            <form action="{{ route('message.destroy', $reply->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn p-0"><i class="bi bi-trash3-fill"
+                                                        style="color: red;font-size:25px"></i></button>
+                                            </form>
+                                            {{-- / Delete --}}
+
+                                            @if (!$isAdmin || $isAdmin && $currentUser->id == $reply->user_id)
+                                                {{-- Update --}}
+                                                <form action="{{ route('message.edit', $reply->id) }}" method="GET">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button type="submit" class="btn p-0"><i class="bi bi-pencil-square"
+                                                            style="color: green; font-size:25px"></i></button>
+                                                </form>
+                                                {{-- / Update --}}
+                                            @endif
+                                        </div> {{-- delete and edit icons  --}}
+                                    @endif
                                 </div> {{-- / user name and pic --}}
 
                                 {{-- title and timestamp --}}

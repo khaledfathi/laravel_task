@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('title', 'Message')
-@section('head' )
+@section('head')
     <link rel="stylesheet" href="{{ asset('assets/css/messages/show.css') }}">
 @endsection
 @section('scripts')
@@ -28,27 +28,29 @@
                         {{-- user name --}}
                         <div class="col"> {{ $message->user_id ? $message->user_name : 'Anonymous' }}</div>
                         {{-- / user name --}}
-
-                        @if (Auth::check() && auth()->user()->id == $message->user_id)
+                        @if ($currentUser && ($currentUser->id == $message->user_id) | $isAdmin)
                             {{-- delete and edit icons  --}}
                             <div class="position-relative col-2 col-md-1 text-end d-flex justify-content-end gap-4">
                                 {{-- Delete --}}
                                 <form action="{{ route('message.destroy', $message->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn p-0"><i class="bi bi-trash3-fill"
+                                    <input id="is-parent-deleted" name="is_parent_deleted" type="hidden"  value="0">
+                                    <button id="delete-button" type="submit" class="btn p-0"><i class="bi bi-trash3-fill"
                                             style="color: red;font-size:25px"></i></button>
                                 </form>
                                 {{-- / Delete --}}
 
-                                {{-- Update --}}
-                                <form action="{{ route('message.edit', $message->id) }}" method="GET">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn p-0"><i class="bi bi-pencil-square"
-                                            style="color: green; font-size:25px"></i></button>
-                                </form>
-                                {{-- / Update --}}
+                                @if (!$isAdmin || ($isAdmin && $currentUser->id == $message->user_id))
+                                    {{-- Update --}}
+                                    <form action="{{ route('message.edit', $message->id) }}" method="GET">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn p-0"><i class="bi bi-pencil-square"
+                                                style="color: green; font-size:25px"></i></button>
+                                    </form>
+                                    {{-- / Update --}}
+                                @endif
                             </div> {{-- delete and edit icons  --}}
                         @endif
                     </div> {{-- / user name and pic --}}
@@ -87,17 +89,7 @@
                             <i class="bi bi-send-fill text-center"></i>
                         </button>
                     </form>
-                    {{--  / replay input --}}
-
-                    {{-- comment button --}}
-                    <div class="row justify-content-center">
-                        <div class="col-3 col-md-2 btn m-2 bg-light" style="font-size:20px" data-bs-toggle="collapse"
-                            data-bs-target='#replies-{{ $message->id }}' aria-expanded="false"
-                            aria-controls="replies-{{ $message->id }}">
-                            <i class="bi bi-chat-left-text-fill"></i>
-                            ({{ $message->replies_count }})
-                        </div> {{-- / comment button --}}
-                    </div>
+                    {{--  / reply input --}}
                 </div>
                 {{-- / comment data area --}}
             </div> {{-- / row --}}
@@ -106,7 +98,7 @@
         @if ($message->replies)
             @foreach ($message->replies as $reply)
                 {{-- replies section --}}
-                <section class="container collapse" id ="replies-{{ $message->id }}">
+                <section class="container" id ="replies-{{ $message->id }}">
                     {{-- row --}}
                     <div class="row my-1 justify-content-end">
                         {{-- comment reply data area --}}
@@ -123,6 +115,31 @@
                                 {{-- user name --}}
                                 <div class="col"> {{ $reply->user_id ? $reply->user_name : 'Anonymous' }}</div>
                                 {{-- / user name --}}
+
+                                @if ($currentUser && ($currentUser->id == $reply->user_id) | $isAdmin)
+                                    {{-- delete and edit icons  --}}
+                                    <div class="position-relative col-2 col-md-1 text-end d-flex justify-content-end gap-4">
+                                        {{-- Delete --}}
+                                        <form action="{{ route('message.destroy', $reply->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn p-0"><i class="bi bi-trash3-fill"
+                                                    style="color: red;font-size:25px"></i></button>
+                                        </form>
+                                        {{-- / Delete --}}
+
+                                        @if (!$isAdmin || ($isAdmin && $currentUser->id == $reply->user_id))
+                                            {{-- Update --}}
+                                            <form action="{{ route('message.edit', $reply->id) }}" method="GET">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="btn p-0"><i class="bi bi-pencil-square"
+                                                        style="color: green; font-size:25px"></i></button>
+                                            </form>
+                                            {{-- / Update --}}
+                                        @endif
+                                    </div> {{-- delete and edit icons  --}}
+                                @endif
                             </div> {{-- / user name and pic --}}
 
                             {{-- title and timestamp --}}

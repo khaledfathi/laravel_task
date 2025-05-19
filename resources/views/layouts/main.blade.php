@@ -24,7 +24,9 @@
                     <a href="{{route('auth.register')}}" class=" btn p-2 bg-primary text-light  ">Register</a>
                     <a href="{{route('auth.login')}}" class=" btn p-2 bg-primary text-light  ">Login</a>
                 @else
-                    <a href="{{route('admin-panel')}}" class=" btn p-2 bg-primary text-light ">Admin Panel</a>
+                    @if (Auth::user() && Auth::user()->is_admin)
+                        <a href="{{route('admin-panel')}}" class=" btn p-2 bg-primary text-light ">Admin Panel</a>
+                    @endif
                     <a href="{{route('user.profile')}}" class=" btn p-2 bg-primary text-light  ">Profile</a>
                     <a href="{{route('auth.logout')}}" class=" btn p-2 bg-primary text-light  ">Logout</a>
                 @endif

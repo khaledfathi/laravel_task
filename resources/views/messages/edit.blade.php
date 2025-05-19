@@ -20,12 +20,12 @@
                 <h5 class="text-success text-center">{{ session('success') }}</h5>
             </div>
         @endif
-        {{-- leave message form --}}
+        {{-- update message form --}}
         <form class="col col-md-7 col-sm-10 d-flex flex-column gap-2 justify-content-evenly align-items-start" method="POST"
             action="{{ route('message.update' , $message->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <h5 class="text-center align-self-center">Leave Your Message</h5>
+            <h5 class="text-center align-self-center mt-3">Update Your Message</h5>
 
             <input type="text" name="title" class="col-12" placeholder="Message Title" value="{{ $message->title }}">
             <textarea class="col-12" class="" name="message" id="" rows=4 style="resize:none;"

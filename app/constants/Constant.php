@@ -3,10 +3,13 @@
 namespace  App\constants;
 
 class Constant {
+    //IDs
+    public static $ADMIN_ID = 1;
     // defaults
-    public static $DEFAULT_USER_IMAGE=  "assets/images/default_user_image.svg";
+    public static $DEFAULT_USER_IMAGE=  "assets".DIRECTORY_SEPARATOR."images".DIRECTORY_SEPARATOR."default_user_image.svg";
 
     //Paths
-    public  static $FILES_UPLOADED_PATH = "storage/message_file_uploaded";
+    public  static $FILES_UPLOADED_PATH = "storage".DIRECTORY_SEPARATOR."message_file_uploaded";
+    public static $MESSAGE_IMAGE_DIR = "message_file_uploaded";
 
 }

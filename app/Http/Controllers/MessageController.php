@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use function PHPUnit\Framework\isEmpty;
+
 class MessageController extends Controller
 {
     public function __construct(private MessageRepositoryContract $MessageRepository) { }
@@ -19,6 +21,8 @@ class MessageController extends Controller
             'messages'=>$messages ,
             'defaultUserImage'=>Constant::$DEFAULT_USER_IMAGE,
             'storagePath' => Constant::$FILES_UPLOADED_PATH,
+            'currentUser' => Auth::user(),
+            'isAdmin' => Auth::user() && Auth::user()->is_admin
         ]);
     }
 
@@ -51,16 +55,17 @@ class MessageController extends Controller
 
     public function show(string $id)
     {
-        $message = $this->MessageRepository->show($id);
+        $message = $this->MessageRepository->showWithReply($id);
         if($message){
             return view('messages.show',[
                 'message' => $message,
                 'defaultUserImage'=>Constant::$DEFAULT_USER_IMAGE,
                 'storagePath' => Constant::$FILES_UPLOADED_PATH,
+                'currentUser' => Auth::user(),
+                'isAdmin' => Auth::user() && Auth::user()->is_admin
             ]);
         }
         return back()->with('error', 'Message not found' );
-
     }
 
     public function edit(string $id)
@@ -79,14 +84,25 @@ class MessageController extends Controller
         return 'update';
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request , string $id)
     {
-        //need to remove the file from storage ***
-
         if(Auth::check()){
-            $this->MessageRepository->destroyWithUser($id , Auth::id());
-            return redirect(route('message.index'))->with('success', 'Message has been deleted successfuly' );
+            $deleted = Auth::id() == Constant::$ADMIN_ID
+                ? $deleted = $this->MessageRepository->destroy($id)
+                : $deleted = $this->MessageRepository->destroyWithUser($id , Auth::id());
+            //file details
+            $fileName= $deleted['fileName'];
+            $filePath = Constant::$MESSAGE_IMAGE_DIR.DIRECTORY_SEPARATOR.$fileName;
+            //delete if found
+            !empty($fileName) ? Storage::disk('public')->delete($filePath): null;
+            //
+        // dd($request->is_parent_deleted == 1);
+            return ( $request->is_parent_deleted
+                ? redirect(route('message.index'))
+                : back() )
+                ->with('success', 'Message has been deleted successfuly' );
         }
         return redirect(route('message.index'))->with('error', 'You are not authorized to delete this message' );
     }
 }
+
