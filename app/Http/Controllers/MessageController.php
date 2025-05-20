@@ -87,7 +87,7 @@ class MessageController extends Controller
     public function destroy(Request $request , string $id)
     {
         if(Auth::check()){
-            $deleted = Auth::id() == Constant::$ADMIN_ID
+            $deleted = Auth::user()->is_admin
                 ? $deleted = $this->MessageRepository->destroy($id)
                 : $deleted = $this->MessageRepository->destroyWithUser($id , Auth::id());
             //file details

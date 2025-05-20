@@ -3,8 +3,6 @@
 namespace  App\constants;
 
 class Constant {
-    //IDs
-    public static $ADMIN_ID = 1;
     // defaults
     public static $DEFAULT_USER_IMAGE=  "assets".DIRECTORY_SEPARATOR."images".DIRECTORY_SEPARATOR."default_user_image.svg";
 
