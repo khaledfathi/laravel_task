@@ -3,8 +3,9 @@
 namespace App\Http\Requests\user;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +24,8 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name'=>'required',
-            'password'=>'required',
-            'email' => 'required|email|unique:users,email',
-            'image' => 'nullable|mimes:png,jpg|file|max:5000'
+            'email'=>'nullable|email|unique:users,email,'.$this->id,
+            'password'=>'nullable|min:8|confirmed',
         ];
     }
 }

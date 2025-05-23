@@ -11,12 +11,13 @@ Route::get('/', fn() => redirect('message'))->name('root');
 
 /* Resource Route */
 Route::resource('/message', MessageController::class);
-Route::resource('/user', UserController::class);
+Route::resource('/user', UserController::class)->middleware('auth');
 /* ---------- */
 
 
 /* User Profile */
 route::get('/user-profile', [UserController::class, 'userProfile'])->name('user.profile');
+route::get('/user-profile/edit', [UserController::class, 'userEditProfile'])->name('user.edit-profile');
 
 /* Auth Routes */
 Route::middleware(['guest'])->group(function (){
