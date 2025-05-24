@@ -7,25 +7,12 @@ use App\Http\Requests\user\UpdateUserRequest;
 use App\repositories\contracts\UserRepositoryContract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
     public function __construct(private  UserRepositoryContract $userRepository) {}
-    public function index()
-    {
-        return "user index";
-    }
-
-    public function create()
-    {
-
-        return "user create";
-    }
-
-    public function store(Request $request)
-    {
-        return "user store";
-    }
 
     public function show(string $id)
     {
@@ -38,15 +25,25 @@ class UserController extends Controller
             return view('user.edit', [
                 'user' => Auth::user(),
                 'storagePath' => Constant::$FILES_UPLOADED_PATH,
-                'defaultImage' => Constant::$DEFAULT_USER_IMAGE,
             ]);
         }
     }
 
     public function update(UpdateUserRequest $request , string $id)
     {
-        //custom request for updating user
-        //update user by using user repository
+        $file = $request->file('image');
+        $storedFileName=null;
+        if($file){
+            $fileName = "image_.".$file->extension();
+            $storedFileName = Storage::disk('public')->putFile("message_file_uploaded", $file);
+        }
+        $updated = $this->userRepository->update(
+            id: $id,
+            name : $request->name,
+            email : $request->email,
+            password:$request->password ? Hash::make($request->password) : null ,
+            image:$storedFileName ? basename($storedFileName) : null
+        );
         return back()->with('success', 'User has been updated');
     }
 
@@ -65,11 +62,9 @@ class UserController extends Controller
     {
         if (Auth::check()) {
             $user = $this->userRepository->showProfile(Auth::id());
-            // dd($user);
             return view('user.profile', [
                 'user' => $user,
-                'defaultUserImage' => Constant::$DEFAULT_USER_IMAGE,
-
+                'storagePath' => Constant::$FILES_UPLOADED_PATH,
             ]);
         }
         return redirect(route('root'));
@@ -81,7 +76,7 @@ class UserController extends Controller
         //show user list here
         return view('admin.index', [
             'users' => $users,
-            'defaultUserImage'=> Constant::$DEFAULT_USER_IMAGE,
+            'storagePath'=> Constant::$FILES_UPLOADED_PATH,
         ]);
     }
 }

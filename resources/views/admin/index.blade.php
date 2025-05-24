@@ -37,7 +37,7 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ asset($user->image) }}" alt="" style="width: 45px; height: 45px"
+                                    <img src="{{ asset($storagePath.$user->image) }}" alt="" style="width: 45px; height: 45px"
                                         class="rounded-circle bg-primary" />
                                     <div class="ms-3">
                                         <p class="fw-bold mb-1">{{ $user->name }}</p>

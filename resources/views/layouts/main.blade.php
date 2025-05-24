@@ -22,7 +22,7 @@
             <ul class="col-md-5 col-xl-4 d-none m-0 d-md-flex justify-content-around align-items-center ">
                 @if (!Auth::check())
                     <a href="{{route('auth.register')}}" class=" btn p-2 bg-primary text-light  ">Register</a>
-                    <a href="{{route('auth.login')}}" class=" btn p-2 bg-primary text-light  ">Login</a>
+                    <a href="{{route('login')}}" class=" btn p-2 bg-primary text-light  ">Login</a>
                 @else
                     @if (Auth::user() && Auth::user()->is_admin)
                         <a href="{{route('admin-panel')}}" class=" btn p-2 bg-primary text-light ">Admin Panel</a>

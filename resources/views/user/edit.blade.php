@@ -5,7 +5,7 @@
 @endsection
 @section('content')
 
-    <form action="{{route('user.update',$user->id)}}" method="POST">
+    <form action="{{route('user.update',$user->id)}}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <input name="id" type="hidden" value="{{$user->id}}">
@@ -34,12 +34,13 @@
                         <div class="card-header">Profile Picture</div>
                         <div class="card-body text-center">
                             <!-- Profile picture image-->
-                            <img name="image" class="img-account-profile rounded-circle mb-2 bg-primary" style="width:111px"
-                                src="{{asset($user->image ?? $defaultUserImage)}}" alt="" >
+                            <img id="profile-image" name="image" class="img-account-profile rounded-circle mb-2 bg-primary" style="width:111px;height:111px"
+                                src="{{asset(($storagePath.$user->image) )}}" alt="Unavaliable" >
                             <!-- Profile picture help block-->
                             <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                             <!-- Profile picture upload button-->
-                            <button class="btn btn-primary" type="button">Upload new image</button>
+                            <button id="new-image-button" class="btn btn-primary" type="button">Upload new image</button>
+                            <input id="image-file" name="image" type="file" style="display:none">
                         </div>
                     </div>
                 </div>

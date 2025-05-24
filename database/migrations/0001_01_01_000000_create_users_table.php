@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('is_admin')->default(false);
-            $table->string('image')->default(Constant::$DEFAULT_USER_IMAGE);
+            $table->string('image')->default(Constant::$DEFAULT_USER_IMAGE_NAME);
             $table->rememberToken();
             $table->timestamps();
         });

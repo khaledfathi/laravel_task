@@ -19,7 +19,6 @@ class MessageController extends Controller
         $messages= $this->MessageRepository->all();
         return view('messages.index', [
             'messages'=>$messages ,
-            'defaultUserImage'=>Constant::$DEFAULT_USER_IMAGE,
             'storagePath' => Constant::$FILES_UPLOADED_PATH,
             'currentUser' => Auth::user(),
             'isAdmin' => Auth::user() && Auth::user()->is_admin
@@ -59,7 +58,6 @@ class MessageController extends Controller
         if($message){
             return view('messages.show',[
                 'message' => $message,
-                'defaultUserImage'=>Constant::$DEFAULT_USER_IMAGE,
                 'storagePath' => Constant::$FILES_UPLOADED_PATH,
                 'currentUser' => Auth::user(),
                 'isAdmin' => Auth::user() && Auth::user()->is_admin
@@ -73,7 +71,6 @@ class MessageController extends Controller
         $message = $this->MessageRepository->show($id);
         return view('messages.edit', [
             'message' => $message,
-            'defaultUserImage'=>Constant::$DEFAULT_USER_IMAGE,
             'storagePath' => Constant::$FILES_UPLOADED_PATH,
         ]);
     }

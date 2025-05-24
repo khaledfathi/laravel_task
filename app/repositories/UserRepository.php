@@ -22,6 +22,18 @@ class UserRepository implements UserRepositoryContract
         ]);
     }
 
+    public function update(int $id , string|null $name=null , string|null $email=null , string|null $password=null , string|null $image=null ):int{
+        $data = [];
+        $name ? $data['name'] = $name : 0;
+        $email? $data['email'] = $email : 0;
+        $password? $data['password'] = $password: 0;
+        $image ? $data['image'] = $image: 0;
+        $userFound = User::find($id);
+        if($userFound){
+            return $userFound->update($data);
+        }
+        return 0;
+    }
     public function show(int $id): User
     {
         return User::findOrFail($id);

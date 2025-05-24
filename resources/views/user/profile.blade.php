@@ -14,8 +14,8 @@
                             <div class="col-md-4  gradient-custom text-center text-white"
                                 style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
                                 <img class= "mt-5 rounded-circle bg-primary"
-                                    src="{{ $user->image ? $user->image : $defaultUserImage }}" alt="Avatar"
-                                    class="img-fluid my-5" style="width: 80px;" />
+                                    src="{{ $storagePath.$user->image}}" alt="Avatar"
+                                    class="img-fluid my-5" style="width: 80px; height:80px" />
                                 <h5 class="my-3">{{ $user->name }}</h5>
                                 <a href="{{ route('user.edit', $user->id) }}">
                                     <i class="bi bi-pencil-square bg-secondary p-2 rounded"
