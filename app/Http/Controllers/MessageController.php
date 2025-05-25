@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\constants\Constant;
+use App\enum\Order;
 use App\Http\Requests\messages\StoreMessageRequest;
 use App\repositories\contracts\MessageRepositoryContract;
 use Illuminate\Http\Request;
@@ -14,14 +15,24 @@ use function PHPUnit\Framework\isEmpty;
 class MessageController extends Controller
 {
     public function __construct(private MessageRepositoryContract $MessageRepository) { }
-    public function index()
+    public function index(Request $request)
     {
-        $messages= $this->MessageRepository->all();
+        $requestOrder = $request->get('order_by') ;
+
+        $orderBy= null;
+        if($requestOrder){
+            $requestOrder == 'latest'
+                ? session()->put(constant::$SESSION_MESSAGE_ORDER, Order::DESC)
+                : session()->put(constant::$SESSION_MESSAGE_ORDER, Order::ASC);
+        }
+
+        $messages= $this->MessageRepository->all(session(Constant::$SESSION_MESSAGE_ORDER, Order::ASC) );
         return view('messages.index', [
             'messages'=>$messages ,
             'storagePath' => Constant::$FILES_UPLOADED_PATH,
             'currentUser' => Auth::user(),
-            'isAdmin' => Auth::user() && Auth::user()->is_admin
+            'isAdmin' => Auth::user() && Auth::user()->is_admin,
+            'orderByLatest' => session(Constant::$SESSION_MESSAGE_ORDER, Order::ASC) == Order::DESC ? true: false,
         ]);
     }
 

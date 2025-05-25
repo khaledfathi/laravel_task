@@ -10,4 +10,6 @@ class Constant {
     public  static $FILES_UPLOADED_PATH = "storage".DIRECTORY_SEPARATOR."message_file_uploaded".DIRECTORY_SEPARATOR;
     public static $MESSAGE_IMAGE_DIR = "message_file_uploaded";
 
+    //session
+    public static $SESSION_MESSAGE_ORDER= "order";
 }

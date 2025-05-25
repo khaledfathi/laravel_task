@@ -3,6 +3,7 @@
 namespace App\repositories;
 
 use App\constants\Constant;
+use App\enum\Order;
 use App\Models\MessageModel;
 use App\repositories\contracts\MessageRepositoryContract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -10,9 +11,9 @@ use Illuminate\Support\Facades\Storage;
 
 class MessageRepository implements MessageRepositoryContract
 {
-    public function all(): LengthAwarePaginator
+    public function all(Order $order): LengthAwarePaginator
     {
-        return MessageModel::withReplies()->orderBy('created_at', 'DESC')->paginate(10);
+        return MessageModel::withReplies()->orderBy('created_at', $order->value)->paginate(10);
     }
     public function store(string $title, string $message, string|null $file = null,  int|null $user_id = null,  int|null  $parent_id = null): int
     {

@@ -49,6 +49,15 @@
             {{ $messages->links() }}
         </div> {{-- / top pagination --}}
 
+        {{-- order by date  --}}
+        <form class="container d-flex justify-content-end align-items-center my-2">
+            <select name="order_by" id="order-by-date-select" class="col-2 form-select" style="width: 150px;">
+                <option value="latest" {{ $orderByLatest ? 'selected' : null}}>Latest</option>
+                <option value="oldest" {{ !$orderByLatest ? 'selected' : null}}>Oldest</option>
+                <input id="order-form-submit" type="submit" class="d-none">
+            </select>
+        </form>
+        {{-- / order by date  --}}
         @foreach ($messages as $message)
             {{-- section2 - message --}}
             <section class="container my-3 p-3 msg-bg rounded-3">
