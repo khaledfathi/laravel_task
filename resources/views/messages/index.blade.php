@@ -70,7 +70,7 @@
                             {{-- user pic --}}
                             <div class="col-2 col-md-1">
                                 <div class="m-auto p-0 overflow-hidden rounded-circle bg-primary user-pic">
-                                    <img class="user-pic" src="{{ asset($storagePath.$message->user_image) }}"
+                                    <img class="user-pic" src="{{ asset($storagePath.($message->user_image??$defaultUserImage) ) }}"
                                         alt="">
                                 </div>
                             </div> {{-- / user pic --}}
@@ -167,7 +167,7 @@
                                     <div class="col-2 col-md-1">
                                         <div class="m-auto p-0 overflow-hidden rounded-circle bg-primary user-pic">
                                             <img class="user-pic"
-                                                src="{{ asset($storagePath.$reply->user_image) }}"
+                                                src="{{ asset($storagePath.($reply->user_image??$defaultUserImage) ) }}"
                                                 alt="">
                                         </div>
                                     </div> {{-- / user pic --}}

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\constants\Constant;
 use App\enum\Order;
 use App\Http\Requests\messages\StoreMessageRequest;
+use App\Http\Requests\messages\UpdateMessageRequest;
+use App\Http\Requests\user\UpdateUserRequest;
 use App\repositories\contracts\MessageRepositoryContract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +16,7 @@ use function PHPUnit\Framework\isEmpty;
 
 class MessageController extends Controller
 {
-    public function __construct(private MessageRepositoryContract $MessageRepository) { }
+    public function __construct(private MessageRepositoryContract $messageRepository) { }
     public function index(Request $request)
     {
         $requestOrder = $request->get('order_by') ;
@@ -26,10 +28,11 @@ class MessageController extends Controller
                 : session()->put(constant::$SESSION_MESSAGE_ORDER, Order::ASC);
         }
 
-        $messages= $this->MessageRepository->all(session(Constant::$SESSION_MESSAGE_ORDER, Order::ASC) );
+        $messages= $this->messageRepository->all(session(Constant::$SESSION_MESSAGE_ORDER, Order::ASC) );
         return view('messages.index', [
             'messages'=>$messages ,
             'storagePath' => Constant::$FILES_UPLOADED_PATH,
+            'defaultUserImage' => Constant::$DEFAULT_USER_IMAGE_NAME,
             'currentUser' => Auth::user(),
             'isAdmin' => Auth::user() && Auth::user()->is_admin,
             'orderByLatest' => session(Constant::$SESSION_MESSAGE_ORDER, Order::ASC) == Order::DESC ? true: false,
@@ -48,10 +51,10 @@ class MessageController extends Controller
         $storedFileName=null;
         if($file){
             $fileName = "image_.".$file->extension();
-            $storedFileName = Storage::disk('public')->putFile("message_file_uploaded", $file);
+            $storedFileName = Storage::disk('public')->putFile(Constant::$MESSAGE_IMAGE_DIR, $file);
         }
         //store in db
-        $id =  $this->MessageRepository->store(
+        $id =  $this->messageRepository->store(
             title:$request->title ,
             message:$request->message ,
             file:$storedFileName ? basename($storedFileName):null,
@@ -65,11 +68,12 @@ class MessageController extends Controller
 
     public function show(string $id)
     {
-        $message = $this->MessageRepository->showWithReply($id);
+        $message = $this->messageRepository->showWithReply($id);
         if($message){
             return view('messages.show',[
                 'message' => $message,
                 'storagePath' => Constant::$FILES_UPLOADED_PATH,
+                'defaultUserImage' => Constant::$DEFAULT_USER_IMAGE_NAME,
                 'currentUser' => Auth::user(),
                 'isAdmin' => Auth::user() && Auth::user()->is_admin
             ]);
@@ -79,25 +83,44 @@ class MessageController extends Controller
 
     public function edit(string $id)
     {
-        $message = $this->MessageRepository->show($id);
+        $message = $this->messageRepository->show($id);
         return view('messages.edit', [
             'message' => $message,
             'storagePath' => Constant::$FILES_UPLOADED_PATH,
         ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateMessageRequest $request, string $id)
     {
-        //need to change/Remove the file from storage ***
-        return 'update';
+        //handle file upload
+        if($request->delete_file){
+            //delete file
+            $record = $this->messageRepository->show($id);
+            $filePath = Constant::$MESSAGE_IMAGE_DIR.DIRECTORY_SEPARATOR.$record->file;
+            Storage::disk('public')->delete($filePath);
+            //update message file to null
+        }
+
+        //update message
+        $this->messageRepository->update(
+            id: $id,
+            title: $request->title,
+            message: $request->message,
+            file: $request->file('file') ? Storage::disk('public')->putFile(Constant::$MESSAGE_IMAGE_DIR, $request->file('file')) : null
+        );
+
+        //back to message page
+        $backId = $request->parent_id ??  $id;
+        return redirect(route('message.show', $backId))
+            ->with('success', 'Message has been updated successfuly' );
     }
 
     public function destroy(Request $request , string $id)
     {
         if(Auth::check()){
             $deleted = Auth::user()->is_admin
-                ? $deleted = $this->MessageRepository->destroy($id)
-                : $deleted = $this->MessageRepository->destroyWithUser($id , Auth::id());
+                ? $deleted = $this->messageRepository->destroy($id)
+                : $deleted = $this->messageRepository->destroyWithUser($id , Auth::id());
             //file details
             $fileName= $deleted['fileName'];
             $filePath = Constant::$MESSAGE_IMAGE_DIR.DIRECTORY_SEPARATOR.$fileName;

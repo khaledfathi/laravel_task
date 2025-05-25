@@ -41,7 +41,7 @@ class AuthController extends Controller
             name: $request->name,
             email:$request->email,
             password:$request->password,
-            image: $request->image ?? Constant::$DEFAULT_USER_IMAGE,
+            image: $request->image ?? Constant::$DEFAULT_USER_IMAGE_NAME
         );
         Auth::login($user);
 
