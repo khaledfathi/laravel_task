@@ -1,7 +1,11 @@
 requirements : 
 
 for quick run , install [XAMPP](https://www.apachefriends.org/) with php 8.2
-install [Composer](https://getcomposer.org/) 2.2.6  or higher 
+
+
+install [Composer](https://getcomposer.org/) 2.2.6  or higher
+
+
 config and run:
 
 ```shell
