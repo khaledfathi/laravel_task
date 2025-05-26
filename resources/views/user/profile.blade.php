@@ -34,7 +34,7 @@
                                         <div class="col-6 mb-3">
                                             <h6>Messages Counter</h6>
                                             <p class="text-muted">
-                                                {{ ($user->message_count ?? 0) + ($user->reply_message_count ?? 0) }}
+                                                {{ $user->message_count ?? 0 }}
                                             </p>
                                         </div>
                                     </div>
@@ -43,7 +43,7 @@
                                     <div class="row pt-1">
                                         <div class="col-6 mb-3">
                                             <h6>Message Posted </h6>
-                                            <p class="text-muted">{{ $user->message_count ?? 0 }}</p>
+                                            <p class="text-muted">{{ ($user->message_count ?? 0)-($user->reply_message_count ?? 0) }}</p>
                                         </div>
                                         <div class="col-6 mb-3">
                                             <h6>Replies Posted</h6>

@@ -43,7 +43,7 @@
         </form> {{-- / leave message form --}}
     </section> {{-- / section1 --}}
 
-    @if ($messages)
+    @if ($messages && count($messages))
         {{-- top pagination --}}
         <div class="container">
             {{ $messages->links() }}
