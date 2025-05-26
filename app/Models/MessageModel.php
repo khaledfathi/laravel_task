@@ -56,7 +56,7 @@ class MessageModel extends Model
                 ->where(function ($query) {
                     $query->whereColumn('messages.user_id', '=', 'users.id')
                         ->orWhereNull('messages.user_id');
-                });
+                })->orderBy('messages.created_at', 'desc');
         }]);
     }
     public function scopeWithReplyUserData(Builder $query)

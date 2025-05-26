@@ -26,7 +26,7 @@ class MessageRepository implements MessageRepositoryContract
         ])->id;
     }
 
-    public function update(int $id , string $title, string $message , string|null $file=null):int{
+    public function update(int $id , string $title, string $message , string|null $file=null ,bool $nullableFile=false):int{
         $record= MessageModel::find($id);
         $data =[
             'title' => $title,
@@ -34,6 +34,7 @@ class MessageRepository implements MessageRepositoryContract
         ];
         //
         if($file) $data['file'] = $file;
+        if($nullableFile) $data['file'] = null;
         //
         if($record){
             return $record->update($data);

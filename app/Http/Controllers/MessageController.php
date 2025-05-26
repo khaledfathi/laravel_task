@@ -92,21 +92,26 @@ class MessageController extends Controller
 
     public function update(UpdateMessageRequest $request, string $id)
     {
+        $record = $this->messageRepository->show($id);
+        $isThereOldFile = false;
         //handle file upload
+        if($record->file) $isThereOldFile = true;
         if($request->delete_file){
             //delete file
-            $record = $this->messageRepository->show($id);
             $filePath = Constant::$MESSAGE_IMAGE_DIR.DIRECTORY_SEPARATOR.$record->file;
             Storage::disk('public')->delete($filePath);
             //update message file to null
+            $isThereOldFile = false;
         }
 
         //update message
+        $newFile = $request ->file('file') ? basename(Storage::disk('public')->putFile(Constant::$MESSAGE_IMAGE_DIR, $request->file('file'))) : null;
         $this->messageRepository->update(
             id: $id,
             title: $request->title,
             message: $request->message,
-            file: $request->file('file') ? Storage::disk('public')->putFile(Constant::$MESSAGE_IMAGE_DIR, $request->file('file')) : null
+            file: $newFile,
+            nullableFile: !$isThereOldFile && !$newFile ,
         );
 
         //back to message page
