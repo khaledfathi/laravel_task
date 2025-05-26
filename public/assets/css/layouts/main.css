@@ -1,0 +1,16 @@
+
+/* header */
+.header--bg{
+    background-color: lightgray;
+}
+/* --------- */
+
+/* nav */
+.nav-icon-size{
+    height: 80px;
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+}
+/* --------- */
+
